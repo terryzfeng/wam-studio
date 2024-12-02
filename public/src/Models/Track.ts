@@ -8,6 +8,10 @@ import {SongTagEnum} from "../Utils/SongTagEnum";
 import BindControl from "./BindControl";
 import BindSliderElement from "../Components/Binds/BindSliderElement";
 
+function volumeToGain(volume: number) {
+    return Math.pow(volume, 1.5);
+}
+
 export default class Track {
 
     id: number;
@@ -74,8 +78,8 @@ export default class Track {
      * @param value
      */
     setVolume(value: number) {
-        this.volume = Math.pow(value, 1.5); // tzfeng 11/11/24 or 2.0
-        this.gainNode.gain.value = this.volume;
+        this.volume = value
+        this.gainNode.gain.value = volumeToGain(value);
     }
 
     /**
@@ -89,7 +93,7 @@ export default class Track {
      * Unmute the track.
      */
     unmute() {
-        this.gainNode.gain.value = this.volume;
+        this.gainNode.gain.value = volumeToGain(this.volume);
     }
 
     /**

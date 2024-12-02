@@ -8,6 +8,11 @@ import TrackElement from "../Components/TrackElement";
 import Plugin from "./Plugin";
 import {BACKEND_URL} from "../Env";
 
+
+function volumeToGain(volume: number) {
+    return Math.pow(volume, 1.5);
+}
+
 /**
  * Host class that contains the master track.
  * It is used to control the global volume and the playhead.
@@ -93,8 +98,8 @@ export default class Host extends Track {
      * @param value the new global volume
      */
     override setVolume(value: number) {
-        this.globalVolume = Math.pow(value, 1.5); // tzfeng: 11/11/24 or 2.0
-        this.gainNode.gain.value = this.globalVolume;
+        this.globalVolume = value;
+        this.gainNode.gain.value = volumeToGain(value); 
     }
 
     /**
@@ -108,6 +113,6 @@ export default class Host extends Track {
      * Unmute the host. It set the global volume to the global volume.
      */
     unmuteHost() {
-        this.gainNode.gain.value = this.globalVolume;
+        this.gainNode.gain.value = volumeToGain(this.globalVolume);
     }
 }
