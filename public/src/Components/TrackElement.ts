@@ -78,7 +78,7 @@ template.innerHTML = /*html*/`
 
 .track-name {
     color: lightgrey;
-    font-familiy: Helvetica, monospace;
+    font-family: Helvetica, monospace;
     font-weight: bold;
     max-width: 146px;
     min-width: 146px;
