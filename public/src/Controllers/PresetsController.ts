@@ -84,7 +84,7 @@ export default class PresetsController {
 
             let presetsObject = [];
             for (let preset of presets) {
-                if (preset.name == "default") {
+                if (preset.name == i18n.t("default")) {
                     continue;
                 }
 
@@ -138,6 +138,10 @@ export default class PresetsController {
     }
 
     addPreset(preset: Preset, tag: SongTagEnum) {
+        if (preset.name === i18n.t("default")) {
+            console.log("You can't add a preset with the name 'Default'");
+            return;
+        }
         let presets = this.presets.get(tag)!;
         if (presets.includes(preset)) {
             presets.splice(presets.indexOf(preset), 1);
