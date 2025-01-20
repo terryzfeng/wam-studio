@@ -66,7 +66,7 @@ export default class HostController {
                     this.app.hostView.updateTimer(newPos);
                     let value = Math.min(((newPos / audioCtx.sampleRate) * 1000) / this.maxTime * 100, 100);
                     this.app.hostView.playbackSlider.value = value.toString();
-                    if (value >= 100) {
+                    if (value >= 99.999) {
                         this.stop();
                     }
                 }
