@@ -52,7 +52,8 @@ export default class PluginsView {
      * Add the event listener to the button that maximizes and minimizes the rack.
      */
     controlRackWindow() {
-        this.maximized = true;
+        this.maximized = false; // default was true, now false - terry 1/19/25
+        this.minimize();
         this.maxMinBtn.addEventListener("click", () => {
             if (this.maximized) {
                 this.minimize();
