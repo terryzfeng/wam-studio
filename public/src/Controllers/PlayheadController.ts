@@ -26,7 +26,7 @@ export default class PlayheadController {
             });
             this.app.host.hostNode?.port.postMessage({playhead: playhead+1});
             this.app.hostView.updateTimer(playhead);
-            this.app.hostController.resumeUpdateInteravel();
+            this.app.hostController.resumeUpdateInterval();
         }
 
         this.app.hostView.playbackSlider.oninput = () => {

@@ -66,6 +66,9 @@ export default class HostController {
                     this.app.hostView.updateTimer(newPos);
                     let value = Math.min(((newPos / audioCtx.sampleRate) * 1000) / this.maxTime * 100, 100);
                     this.app.hostView.playbackSlider.value = value.toString();
+                    if (value >= 100) {
+                        this.stop();
+                    }
                 }
             }
             requestAnimationFrame(updateFrame);
@@ -238,7 +241,7 @@ export default class HostController {
     /**
      * Resume the timer interval. Used when the user is jumping to a specific beat.
      */
-    resumeUpdateInteravel() {
+    resumeUpdateInterval() {
         this.pauseInterval = false;
     }
 
@@ -250,47 +253,43 @@ export default class HostController {
         if (audioCtx.state === "suspended") {
             audioCtx.resume();
         }
+
         if (this.playing) {
-            this.app.tracksController.trackList.forEach((track) => {
-                //@ts-ignore
-                track.node.parameters.get("playing").value = 0;
-                clearInterval(this.timerInterval as NodeJS.Timeout);
-            });
-            //@ts-ignore
-            this.app.host.hostNode.parameters.get("playing").value = 0;
+            this.pause();
+        } else {
+            this.play();
         }
-        else {
-            this.app.tracksController.trackList.forEach(async (track) => {
-                //@ts-ignore
-                track.node.parameters.get("playing").value = 1;
-            });
-            //@ts-ignore
-            this.app.host.hostNode.parameters.get("playing").value = 1;
-        }
-        this.playing = !this.playing;
-        this.hostView.pressPlayButton(this.playing);
     }
 
     stop() {
-        if (this.app.host.node) {
-            // @ts-ignore
-            this.app.host.node.parameters.get("playing").value = 0;
-            this.app.host.node?.port.postMessage({playhead: 0});
-        }
-        this.app.tracksController.trackList.forEach(async (track) => {
-            //@ts-ignore
-            track.node.parameters.get("playing").value = 0;
-            track.node?.port.postMessage({playhead: 0});
-        });
+        // Pause, Reset timer and slider
+        this.pause();
+        this.app.tracksController.jumpTo(0);
     }
 
     play() {
         // @ts-ignore
-        this.app.host.hostNode.parameters.get("playing").value = 0;
+        this.app.host.hostNode.parameters.get("playing").value = 1;
         this.app.tracksController.trackList.forEach(async (track) => {
             //@ts-ignore
             track.node.parameters.get("playing").value = 1;
         });
+
+        this.playing = true;
+        this.hostView.pressPlayButton(this.playing);
+    }
+
+    pause() {
+        this.app.tracksController.trackList.forEach((track) => {
+            //@ts-ignore
+            track.node.parameters.get("playing").value = 0;
+            clearInterval(this.timerInterval as NodeJS.Timeout);
+        });
+        //@ts-ignore
+        this.app.host.hostNode.parameters.get("playing").value = 0;
+
+        this.playing = false;
+        this.hostView.pressPlayButton(this.playing);
     }
 
     switchMode() {

@@ -316,6 +316,7 @@ export default class TracksController {
     async openSong(song:any, name: string) {
         this.app.tracksController.clearAllTracks();
         this.app.hostView.headerTitle.innerHTML = name;
+        this.app.hostController.stop();
         this.app.hostController.maxTime = 0;
         let splitting = song.splitting;
         for (let trackSong of song.songs) {
@@ -382,6 +383,9 @@ export default class TracksController {
                         // this.app.hostController.maxTime = (Math.max(this.app.hostController.maxTime, track.audioBuffer!.duration*1000));
                         this.app.hostController.updateBufferTime(Math.max(this.app.hostController.maxTime, track.audioBuffer!.duration*1000));
                         track.element.progressDone();
+
+                        // Stop playback when track gets added - terry 1/20/25
+                        this.app.hostController.stop();
                     });
             } else {
                 // Error occurred during the request
