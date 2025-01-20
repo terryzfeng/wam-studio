@@ -265,6 +265,7 @@ export default class HostController {
         // Pause, Reset timer and slider
         this.pause();
         this.app.tracksController.jumpTo(0);
+        this.app.hostView.playbackSlider.value = "0";  
     }
 
     play() {
