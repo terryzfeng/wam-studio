@@ -67,6 +67,7 @@ export default class Loader {
 
         this.app.hostController.playing = false;
         this.app.hostController.stop();
+        this.app.hostController.maxTime = 0;
         this.app.tracksController.clearAllTracks();
         this.app.host.timer = 0;
         this.app.host.playhead = 0;
@@ -80,8 +81,7 @@ export default class Loader {
             if (trackJson.url === null) {
                 track = await this.app.tracksController.newEmptyTrack();
                 await this.app.tracksController.initTrackComponents(track);
-            }
-            else {
+            } else {
                 track = await this.app.tracksController.newEmptyTrack(trackJson);
                 await this.app.tracksController.initTrackComponents(track);
                 await this.app.tracksController.loadTrackUrl(track);
