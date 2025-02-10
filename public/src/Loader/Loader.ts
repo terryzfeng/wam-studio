@@ -71,7 +71,6 @@ export default class Loader {
         this.app.tracksController.clearAllTracks();
         this.app.host.timer = 0;
         this.app.host.playhead = 0;
-        this.app.tracksController.trackIdCount = 1;
 
 
         this.app.hostView.headerTitle.innerHTML = json.songName;
@@ -80,14 +79,15 @@ export default class Loader {
             let track: Track;
             if (trackJson.url === null) {
                 track = await this.app.tracksController.newEmptyTrack();
+                track.id = trackJson.id;
                 await this.app.tracksController.initTrackComponents(track);
             } else {
                 track = await this.app.tracksController.newEmptyTrack(trackJson);
+                track.id = trackJson.id;
                 await this.app.tracksController.initTrackComponents(track);
                 await this.app.tracksController.loadTrackUrl(track);
             }
 
-            track.id = trackJson.id;
             track.tag = trackJson.tag;
             track.plugin.state = trackJson.plugin;
 

@@ -310,6 +310,7 @@ export default class TracksController {
             track.node!.disconnectEvents();
             track.node!.disconnect();
         }
+        this.trackIdCount = 1;
         this.trackList = [];
     }
 
